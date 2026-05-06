@@ -19,6 +19,7 @@ def bet(bal,bet,Nbet):
         balY.append(newBal)
     plt.plot(cntX,balY)
 blown=0
+profitable=0
 def martingale(bal,bet,Nbet):
     newBal = bal
     n = 0
@@ -32,21 +33,32 @@ def martingale(bal,bet,Nbet):
             newBet=bet
         else:
             newBal = newBal - newBet
-            newBet=newBet*2
+            if(newBet >= newBal):
+                newBet = newBal
+            else:
+                newBet=newBet*2
 
         cntX.append(n)
         balY.append(newBal)
-    if(n<Nbet):
+        if(newBet == 0):
+            break
+    if(newBet <= 0):
         global blown
         blown+=1
     plt.plot(cntX, balY)
+    if(newBal >= bal):
+        global profitable
+        profitable+=1
+
 
 cnt=0
 total=100
 while cnt < total:
-    martingale(10000,100,1000)
+    martingale(100,1,100)
+
     cnt+=1
 plt.xlabel('number of bets')
 plt.ylabel('balance')
 print("blown rate :",blown/total*100)
+print("profitable rate :",profitable/total*100)
 plt.show()
